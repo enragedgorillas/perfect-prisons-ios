@@ -10,6 +10,7 @@
 
 #import "AppDelegate.h"
 #import "IntroLayer.h"
+#import "GCTurnBasedMatchHelper.h"
 
 @implementation AppController
 
@@ -51,7 +52,7 @@
 //	[director setProjection:kCCDirectorProjection3D];
 
 	// Enables High Res mode (Retina Display) on iPhone 4 and maintains low res on all other devices
-	if( ! [director_ enableRetinaDisplay:YES] )
+	if( ! [director_ enableRetinaDisplay:NO] )
 		CCLOG(@"Retina Display Not supported");
 
 	// Default texture format for PNG/BMP/TIFF/JPEG/GIF images
@@ -72,8 +73,8 @@
 	// Assume that PVR images have premultiplied alpha
 	[CCTexture2D PVRImagesHavePremultipliedAlpha:YES];
 
-	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.
-	[director_ pushScene: [IntroLayer scene]]; 
+	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.    
+	[director_ pushScene: [IntroLayer scene]];
 
 	
 	// Create a Navigation Controller with the Director
@@ -86,7 +87,7 @@
 	
 	// make main window visible
 	[window_ makeKeyAndVisible];
-	
+	[[GCTurnBasedMatchHelper sharedInstance] authenticateLocalUser];
 	return YES;
 }
 
@@ -94,6 +95,11 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
 	return UIInterfaceOrientationIsLandscape(interfaceOrientation);
+}
+- (NSUInteger)application:(UIApplication*)application supportedInterfaceOrientationsForWindow:(UIWindow*)window
+{
+    
+    return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 
@@ -140,7 +146,6 @@
 {
 	[[CCDirector sharedDirector] setNextDeltaTimeZero:YES];
 }
-
 - (void) dealloc
 {
 	[window_ release];

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		77006CD316C8AD7B00E78ABC /* MainMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 77006CD216C8AD7B00E78ABC /* MainMenu.m */; };
+		77006CD616C8B30D00E78ABC /* GCTurnBasedMatchHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 77006CD516C8B30D00E78ABC /* GCTurnBasedMatchHelper.m */; };
 		7733393F16BC648100843DD7 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7733393E16BC648100843DD7 /* QuartzCore.framework */; };
 		7733394116BC648100843DD7 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7733394016BC648100843DD7 /* OpenGLES.framework */; };
 		7733394316BC648100843DD7 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7733394216BC648100843DD7 /* OpenAL.framework */; };
@@ -131,12 +133,26 @@
 		77333AC216BC648300843DD7 /* vec4.c in Sources */ = {isa = PBXBuildFile; fileRef = 77333AC116BC648300843DD7 /* vec4.c */; };
 		77333AC716BC648300843DD7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 77333AC616BC648300843DD7 /* main.m */; };
 		77333ACA16BC648300843DD7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 77333AC916BC648300843DD7 /* AppDelegate.m */; };
-		77333ACD16BC648300843DD7 /* HelloWorldLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77333ACC16BC648300843DD7 /* HelloWorldLayer.m */; };
 		77333AD016BC648300843DD7 /* IntroLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77333ACF16BC648300843DD7 /* IntroLayer.m */; };
+		77333AD816BC64A400843DD7 /* Wall.m in Sources */ = {isa = PBXBuildFile; fileRef = 77333AD716BC64A400843DD7 /* Wall.m */; };
+		77333ADB16BC65DE00843DD7 /* GameState.m in Sources */ = {isa = PBXBuildFile; fileRef = 77333ADA16BC65DE00843DD7 /* GameState.m */; };
+		77333ADE16BC661900843DD7 /* Pawn.m in Sources */ = {isa = PBXBuildFile; fileRef = 77333ADD16BC661900843DD7 /* Pawn.m */; };
+		7748C53B16C6BB4D00FFFD34 /* PathfinderClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 7748C53A16C6BB4D00FFFD34 /* PathfinderClass.m */; };
+		7748C53E16C6BB5D00FFFD34 /* PathfinderStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 7748C53D16C6BB5D00FFFD34 /* PathfinderStep.m */; };
+		77CCDA5816BF03840086B5F8 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 77CCDA5716BF03840086B5F8 /* GameScene.m */; };
+		77CCDA5B16BF039D0086B5F8 /* GameLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77CCDA5A16BF039D0086B5F8 /* GameLayer.m */; };
+		77CCDA5E16BF04900086B5F8 /* HudLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 77CCDA5D16BF04900086B5F8 /* HudLayer.m */; };
+		77CCDA6016BF05020086B5F8 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 77CCDA5F16BF05020086B5F8 /* Default-568h@2x.png */; };
+		77CCDA6516BF0DDF0086B5F8 /* spritesheetTake2.png in Resources */ = {isa = PBXBuildFile; fileRef = 77CCDA6316BF0DDF0086B5F8 /* spritesheetTake2.png */; };
+		77CCDA6616BF0DDF0086B5F8 /* tmx1.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 77CCDA6416BF0DDF0086B5F8 /* tmx1.tmx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7733393B16BC648100843DD7 /* HHFYWF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HHFYWF.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		77006CD116C8AD7B00E78ABC /* MainMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenu.h; sourceTree = "<group>"; };
+		77006CD216C8AD7B00E78ABC /* MainMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenu.m; sourceTree = "<group>"; };
+		77006CD416C8B30D00E78ABC /* GCTurnBasedMatchHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCTurnBasedMatchHelper.h; sourceTree = "<group>"; };
+		77006CD516C8B30D00E78ABC /* GCTurnBasedMatchHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTurnBasedMatchHelper.m; sourceTree = "<group>"; };
+		7733393B16BC648100843DD7 /* Perfect Prisons.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Perfect Prisons.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7733393E16BC648100843DD7 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7733394016BC648100843DD7 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		7733394216BC648100843DD7 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
@@ -394,10 +410,27 @@
 		77333AC616BC648300843DD7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		77333AC816BC648300843DD7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		77333AC916BC648300843DD7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		77333ACB16BC648300843DD7 /* HelloWorldLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HelloWorldLayer.h; sourceTree = "<group>"; };
-		77333ACC16BC648300843DD7 /* HelloWorldLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HelloWorldLayer.m; sourceTree = "<group>"; };
 		77333ACE16BC648300843DD7 /* IntroLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IntroLayer.h; sourceTree = "<group>"; };
 		77333ACF16BC648300843DD7 /* IntroLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IntroLayer.m; sourceTree = "<group>"; };
+		77333AD616BC64A400843DD7 /* Wall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wall.h; sourceTree = "<group>"; };
+		77333AD716BC64A400843DD7 /* Wall.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Wall.m; sourceTree = "<group>"; };
+		77333AD916BC65DE00843DD7 /* GameState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameState.h; sourceTree = "<group>"; };
+		77333ADA16BC65DE00843DD7 /* GameState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameState.m; sourceTree = "<group>"; };
+		77333ADC16BC661900843DD7 /* Pawn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pawn.h; sourceTree = "<group>"; };
+		77333ADD16BC661900843DD7 /* Pawn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pawn.m; sourceTree = "<group>"; };
+		7748C53916C6BB4D00FFFD34 /* PathfinderClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathfinderClass.h; sourceTree = "<group>"; };
+		7748C53A16C6BB4D00FFFD34 /* PathfinderClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PathfinderClass.m; sourceTree = "<group>"; };
+		7748C53C16C6BB5D00FFFD34 /* PathfinderStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathfinderStep.h; sourceTree = "<group>"; };
+		7748C53D16C6BB5D00FFFD34 /* PathfinderStep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PathfinderStep.m; sourceTree = "<group>"; };
+		77CCDA5616BF03840086B5F8 /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
+		77CCDA5716BF03840086B5F8 /* GameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
+		77CCDA5916BF039D0086B5F8 /* GameLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameLayer.h; sourceTree = "<group>"; };
+		77CCDA5A16BF039D0086B5F8 /* GameLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameLayer.m; sourceTree = "<group>"; };
+		77CCDA5C16BF04900086B5F8 /* HudLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HudLayer.h; sourceTree = "<group>"; };
+		77CCDA5D16BF04900086B5F8 /* HudLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HudLayer.m; sourceTree = "<group>"; };
+		77CCDA5F16BF05020086B5F8 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		77CCDA6316BF0DDF0086B5F8 /* spritesheetTake2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spritesheetTake2.png; sourceTree = "<group>"; };
+		77CCDA6416BF0DDF0086B5F8 /* tmx1.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tmx1.tmx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -420,9 +453,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		77006CD016C8AD3A00E78ABC /* GameScene */ = {
+			isa = PBXGroup;
+			children = (
+				7748C53F16C6BB6C00FFFD34 /* Pathfinder */,
+				7748C54016C6BB8000FFFD34 /* GameData */,
+				77CCDA5616BF03840086B5F8 /* GameScene.h */,
+				77CCDA5716BF03840086B5F8 /* GameScene.m */,
+				77CCDA5C16BF04900086B5F8 /* HudLayer.h */,
+				77CCDA5D16BF04900086B5F8 /* HudLayer.m */,
+				77CCDA5916BF039D0086B5F8 /* GameLayer.h */,
+				77CCDA5A16BF039D0086B5F8 /* GameLayer.m */,
+			);
+			name = GameScene;
+			sourceTree = "<group>";
+		};
+		77006CD716C8B31000E78ABC /* GameKit */ = {
+			isa = PBXGroup;
+			children = (
+				77006CD416C8B30D00E78ABC /* GCTurnBasedMatchHelper.h */,
+				77006CD516C8B30D00E78ABC /* GCTurnBasedMatchHelper.m */,
+			);
+			name = GameKit;
+			sourceTree = "<group>";
+		};
 		7733393216BC648100843DD7 = {
 			isa = PBXGroup;
 			children = (
+				77CCDA5F16BF05020086B5F8 /* Default-568h@2x.png */,
 				7733395016BC648100843DD7 /* HHFYWF */,
 				7733393D16BC648100843DD7 /* Frameworks */,
 				7733393C16BC648100843DD7 /* Products */,
@@ -432,7 +490,7 @@
 		7733393C16BC648100843DD7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7733393B16BC648100843DD7 /* HHFYWF.app */,
+				7733393B16BC648100843DD7 /* Perfect Prisons.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -458,10 +516,12 @@
 			children = (
 				77333AC816BC648300843DD7 /* AppDelegate.h */,
 				77333AC916BC648300843DD7 /* AppDelegate.m */,
-				77333ACB16BC648300843DD7 /* HelloWorldLayer.h */,
-				77333ACC16BC648300843DD7 /* HelloWorldLayer.m */,
 				77333ACE16BC648300843DD7 /* IntroLayer.h */,
 				77333ACF16BC648300843DD7 /* IntroLayer.m */,
+				77006CD116C8AD7B00E78ABC /* MainMenu.h */,
+				77006CD216C8AD7B00E78ABC /* MainMenu.m */,
+				77006CD716C8B31000E78ABC /* GameKit */,
+				77006CD016C8AD3A00E78ABC /* GameScene */,
 				7733395116BC648100843DD7 /* Resources */,
 				7733396B16BC648100843DD7 /* libs */,
 				77333AC416BC648300843DD7 /* Supporting Files */,
@@ -472,6 +532,8 @@
 		7733395116BC648100843DD7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				77CCDA6316BF0DDF0086B5F8 /* spritesheetTake2.png */,
+				77CCDA6416BF0DDF0086B5F8 /* tmx1.tmx */,
 				7733395216BC648100843DD7 /* Default.png */,
 				7733395416BC648100843DD7 /* Default-Landscape~ipad.png */,
 				7733395616BC648100843DD7 /* fps_images.png */,
@@ -832,12 +894,36 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		7748C53F16C6BB6C00FFFD34 /* Pathfinder */ = {
+			isa = PBXGroup;
+			children = (
+				7748C53916C6BB4D00FFFD34 /* PathfinderClass.h */,
+				7748C53A16C6BB4D00FFFD34 /* PathfinderClass.m */,
+				7748C53C16C6BB5D00FFFD34 /* PathfinderStep.h */,
+				7748C53D16C6BB5D00FFFD34 /* PathfinderStep.m */,
+			);
+			name = Pathfinder;
+			sourceTree = "<group>";
+		};
+		7748C54016C6BB8000FFFD34 /* GameData */ = {
+			isa = PBXGroup;
+			children = (
+				77333ADC16BC661900843DD7 /* Pawn.h */,
+				77333ADD16BC661900843DD7 /* Pawn.m */,
+				77333AD916BC65DE00843DD7 /* GameState.h */,
+				77333ADA16BC65DE00843DD7 /* GameState.m */,
+				77333AD616BC64A400843DD7 /* Wall.h */,
+				77333AD716BC64A400843DD7 /* Wall.m */,
+			);
+			name = GameData;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7733393A16BC648100843DD7 /* HHFYWF */ = {
+		7733393A16BC648100843DD7 /* Perfect Prisons */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 77333AD316BC648300843DD7 /* Build configuration list for PBXNativeTarget "HHFYWF" */;
+			buildConfigurationList = 77333AD316BC648300843DD7 /* Build configuration list for PBXNativeTarget "Perfect Prisons" */;
 			buildPhases = (
 				7733393716BC648100843DD7 /* Sources */,
 				7733393816BC648100843DD7 /* Frameworks */,
@@ -847,9 +933,9 @@
 			);
 			dependencies = (
 			);
-			name = HHFYWF;
+			name = "Perfect Prisons";
 			productName = HHFYWF;
-			productReference = 7733393B16BC648100843DD7 /* HHFYWF.app */;
+			productReference = 7733393B16BC648100843DD7 /* Perfect Prisons.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -860,7 +946,7 @@
 			attributes = {
 				LastUpgradeCheck = 0460;
 			};
-			buildConfigurationList = 7733393616BC648100843DD7 /* Build configuration list for PBXProject "HHFYWF" */;
+			buildConfigurationList = 7733393616BC648100843DD7 /* Build configuration list for PBXProject "Perfect Prisons" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -872,7 +958,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7733393A16BC648100843DD7 /* HHFYWF */,
+				7733393A16BC648100843DD7 /* Perfect Prisons */,
 			);
 		};
 /* End PBXProject section */
@@ -895,6 +981,9 @@
 				7733396716BC648100843DD7 /* Icon@2x.png in Resources */,
 				7733396A16BC648100843DD7 /* iTunesArtwork in Resources */,
 				77333AA816BC648300843DD7 /* ChangeLog in Resources */,
+				77CCDA6016BF05020086B5F8 /* Default-568h@2x.png in Resources */,
+				77CCDA6516BF0DDF0086B5F8 /* spritesheetTake2.png in Resources */,
+				77CCDA6616BF0DDF0086B5F8 /* tmx1.tmx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1007,18 +1096,28 @@
 				77333AC216BC648300843DD7 /* vec4.c in Sources */,
 				77333AC716BC648300843DD7 /* main.m in Sources */,
 				77333ACA16BC648300843DD7 /* AppDelegate.m in Sources */,
-				77333ACD16BC648300843DD7 /* HelloWorldLayer.m in Sources */,
 				77333AD016BC648300843DD7 /* IntroLayer.m in Sources */,
+				77333AD816BC64A400843DD7 /* Wall.m in Sources */,
+				77333ADB16BC65DE00843DD7 /* GameState.m in Sources */,
+				77333ADE16BC661900843DD7 /* Pawn.m in Sources */,
+				77CCDA5816BF03840086B5F8 /* GameScene.m in Sources */,
+				77CCDA5B16BF039D0086B5F8 /* GameLayer.m in Sources */,
+				77CCDA5E16BF04900086B5F8 /* HudLayer.m in Sources */,
+				7748C53B16C6BB4D00FFFD34 /* PathfinderClass.m in Sources */,
+				7748C53E16C6BB5D00FFFD34 /* PathfinderStep.m in Sources */,
+				77006CD316C8AD7B00E78ABC /* MainMenu.m in Sources */,
+				77006CD616C8B30D00E78ABC /* GCTurnBasedMatchHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		77333AD116BC648300843DD7 /* Debug */ = {
+		771374F616CB4EB300008781 /* Ad Hoc Beta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1030,7 +1129,56 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Ad Hoc Beta";
+		};
+		771374F716CB4EB300008781 /* Ad Hoc Beta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = HHFYWF/Prefix.pch;
+				HEADER_SEARCH_PATHS = "\"HHFYWF/libs/kazmath/include\"";
+				INFOPLIST_FILE = HHFYWF/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = (
+					"-lz",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "Perfect Prisons";
+				WRAPPER_EXTENSION = app;
+			};
+			name = "Ad Hoc Beta";
+		};
+		77333AD116BC648300843DD7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					DEBUG,
+					"COCOS2D_DEBUG=1",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1040,6 +1188,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1049,7 +1198,10 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1059,17 +1211,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = HHFYWF/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"HHFYWF/libs/kazmath/include\"";
 				INFOPLIST_FILE = HHFYWF/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Perfect Prisons";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1078,16 +1232,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = HHFYWF/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"HHFYWF/libs/kazmath/include\"";
 				INFOPLIST_FILE = HHFYWF/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Perfect Prisons";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1096,22 +1252,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7733393616BC648100843DD7 /* Build configuration list for PBXProject "HHFYWF" */ = {
+		7733393616BC648100843DD7 /* Build configuration list for PBXProject "Perfect Prisons" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				77333AD116BC648300843DD7 /* Debug */,
+				771374F616CB4EB300008781 /* Ad Hoc Beta */,
 				77333AD216BC648300843DD7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		77333AD316BC648300843DD7 /* Build configuration list for PBXNativeTarget "HHFYWF" */ = {
+		77333AD316BC648300843DD7 /* Build configuration list for PBXNativeTarget "Perfect Prisons" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				77333AD416BC648300843DD7 /* Debug */,
+				771374F716CB4EB300008781 /* Ad Hoc Beta */,
 				77333AD516BC648300843DD7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
