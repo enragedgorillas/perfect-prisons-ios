@@ -55,9 +55,8 @@
 			
 			
             AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
-            [[GCTurnBasedMatchHelper sharedInstance]
-             findMatchWithMinPlayers:2 maxPlayers:2 viewController:app.navController];
-			//[self newGame];
+           [[GCTurnBasedMatchHelper sharedInstance] findMatchWithMinPlayers:2 maxPlayers:2 viewController:app.navController];
+//			[self newGame];
         }];
 		// Default font size will be 28 points.
 		[CCMenuItemFont setFontSize:28];

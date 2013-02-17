@@ -13,18 +13,24 @@
 @implementation HudLayer
 
 
--(id) initWithGameState: (GameState *) gameState{
+-(id) init{
     self = [super init];
     CGSize winSize = [CCDirector sharedDirector].winSize;
+    labelSelf = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"%i",ownWalls]fontName:@"Marker Felt" fontSize:24];
+    labelSelf.position =  ccp(winSize.width - 31, winSize.height/4);
+    [self addChild:labelSelf];
+    labelThem = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"%i", theirWalls] fontName:@"Marker Felt" fontSize:24];
+    labelThem.position = ccp(winSize.width - 31, 3*winSize.height/4);
+    [self addChild:labelThem];
 
-    CCLabelTTF * label = [CCLabelTTF labelWithString:@"Walls Remaining" fontName:@"Arial" fontSize:42.0];
-    label.color = ccc3(0,0,0);
-    label.position = ccp(winSize.width/2, winSize.height/2);
-    [self addChild:label];
     return self;
     
 }
--(void) updateWithP1Walls:(int)p1WallsLeft andP2Walls:(int)p2WallsLeft{
-    
+-(void) updateWithPlayer1:(int)numSelf andPlayer2Walls:(int)numThem{
+    ownWalls = numSelf;
+    theirWalls = numThem;
+    [labelThem setString:[NSString stringWithFormat:@"%i", theirWalls]];
+    [labelSelf setString:[NSString stringWithFormat:@"%i", ownWalls]];
 }
+
 @end

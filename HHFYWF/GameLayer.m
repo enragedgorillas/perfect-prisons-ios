@@ -37,6 +37,7 @@
 
 -(id) init
 {
+    CGSize size = [[CCDirector sharedDirector] winSize];
     if( (self=[super init] )) {
         
         self.tileMap = [CCTMXTiledMap tiledMapWithTMXFile:@"tmx1.tmx"];
@@ -45,20 +46,25 @@
         [self addChild:_tileMap z:-1];
         self.hudLayer = [HudLayer node];
         [self addChild:_hudLayer z:2];
-        
-        
+        upArrow = [CCSprite spriteWithFile:@"uparrow.png"];
+        [upArrow setPosition:ccp(size.width -31, size.height - 30)];
+        [upArrow setVisible:YES];
+        downArrow = [CCSprite spriteWithFile:@"downarrow.png"];
+        [downArrow setPosition:ccp(size.width - 31, 30)];
+        [downArrow setVisible:NO];
+        [self addChild:upArrow];
+        [self addChild:downArrow];
         
     }
     self.isTouchEnabled = YES;
     currentGameState = [[GameState alloc]initWithNewMatch];
     //remove after gamecenter works
     [self initWithTurnBasedMatch:[[GCTurnBasedMatchHelper sharedInstance] currentMatch]];
-
+    [self.hudLayer updateWithPlayer1:currentGameState.p1WallsRemaining andPlayer2Walls:currentGameState.p2WallsRemaining];
     CCMenuItem *back = [CCMenuItemFont itemWithString:@"BACK" block:^(id sender){
         [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenu scene] withColor:ccWHITE]];
 
     }];
-    CGSize size = [[CCDirector sharedDirector] winSize];
     CCMenu *backMenu = [CCMenu menuWithItems:back, nil];
     [backMenu alignItemsVerticallyWithPadding:20];
     [backMenu setPosition:ccp(size.width - 31, size.height/2)];
@@ -73,24 +79,16 @@
     
     if(firstParticipant.lastTurnDate){
         currentGameState = [[NSKeyedUnarchiver unarchiveObjectWithData:match.matchData] retain];
-        if(firstParticipant == match.currentParticipant){
-            if(currentGameState.currentPlayer == 1){
-                isPlayersTurn = YES;
-            }else{
-                isPlayersTurn= NO;
-            }
-        }else{
-            if(currentGameState.currentPlayer == 2){
-                isPlayersTurn = YES;
-            }else{
-                isPlayersTurn= NO;
-            }
-
+        if ([match.currentParticipant.playerID isEqualToString:[GKLocalPlayer localPlayer].playerID]) {
+            isPlayersTurn = YES;
         }
+        else{
+            isPlayersTurn = NO;
+        }
+
     }else{
         isPlayersTurn = YES;
     }
-//    [_hudLayer updateWithP1Walls:currGameState.p1WallsRemaining andP2Walls:currGameState.p2WallsRemaining];
     
     [self movePawnFrom: CGPointMake(4, 8) to:CGPointMake(currentGameState.player1Pawn.x, currentGameState.player1Pawn.y)];
     [self movePawnFrom: CGPointMake(4, 0) to:CGPointMake(currentGameState.player2Pawn.x, currentGameState.player2Pawn.y)];
@@ -132,7 +130,17 @@
     [_tileMap setPosition: ccpAdd(_tileMap.position, diff)];
     
     NSLog(@"%f",_tileMap.position.y);
-    
+    if (_tileMap.position.y < 0) {
+        [downArrow setVisible:YES];
+    }else{
+        [downArrow setVisible:NO];
+    }
+    if (_tileMap.position.y < -100) {
+        [upArrow setVisible:NO];
+    }else{
+        [upArrow setVisible:YES];
+    }
+
     didMove = YES;
 }
 
@@ -225,6 +233,12 @@
     }
     if([self isWon]){
         [self wonMatch];
+        UIAlertView *wonAlertView = [[UIAlertView alloc] initWithTitle: @"You Win!" message: nil delegate: nil cancelButtonTitle: @"Awesome!" otherButtonTitles: nil];
+        [[[CCDirector sharedDirector] view] addSubview: wonAlertView];
+        [wonAlertView show];
+        [wonAlertView release];
+
+        
     }
     
     
@@ -236,6 +250,8 @@
         [endTurnAlertView release];
 
     }
+    [self.hudLayer updateWithPlayer1:currentGameState.p1WallsRemaining andPlayer2Walls:currentGameState.p2WallsRemaining];
+
     
 }
 -(CGPoint) tilePosFromLocation:(CGPoint)location tileMap:(CCTMXTiledMap*)tileMap
@@ -305,11 +321,31 @@
         if(oldWall.topLeftPointX == wall.topLeftPointX && oldWall.topLeftPointY == wall.topLeftPointY){
             return NO;
         }
-        if((oldWall.topLeftPointX == wall.topLeftPointX +1 || oldWall.topLeftPointX == wall.topLeftPointX -1) && (oldWall.isVertical == NO && wall.isVertical == NO)){
+        if((oldWall.topLeftPointX == wall.topLeftPointX +1 || oldWall.topLeftPointX == wall.topLeftPointX -1) && (wall.topLeftPointY == oldWall.topLeftPointY) && (oldWall.isVertical == NO && wall.isVertical == NO)){
             return NO;
         }
-        if((oldWall.topLeftPointY == wall.topLeftPointY +1 || oldWall.topLeftPointY == wall.topLeftPointY -1) && (oldWall.isVertical == YES && wall.isVertical == YES)){
+        if((oldWall.topLeftPointY == wall.topLeftPointY +1 || oldWall.topLeftPointY == wall.topLeftPointY -1) && (wall.topLeftPointX == oldWall.topLeftPointX) && (oldWall.isVertical == YES && wall.isVertical == YES)){
             return NO;
+        }
+
+    }
+    if(currentGameState.currentPlayer == 1){
+        if(currentGameState.p1WallsRemaining < 0){
+            UIAlertView *badWall = [[UIAlertView alloc] initWithTitle: @"Illegal Wall" message: @"You have no walls left" delegate: self cancelButtonTitle: @"Ok" otherButtonTitles: nil];
+            [[[CCDirector sharedDirector] view] addSubview: badWall];
+            [badWall show];
+            [badWall release];
+            return NO;
+
+        }
+    }else{
+        if(currentGameState.p2WallsRemaining < 0){
+            UIAlertView *badWall = [[UIAlertView alloc] initWithTitle: @"Illegal Wall" message: @"You have no walls left" delegate: self cancelButtonTitle: @"Ok" otherButtonTitles: nil];
+            [[[CCDirector sharedDirector] view] addSubview: badWall];
+            [badWall show];
+            [badWall release];
+            return NO;
+            
         }
 
     }
@@ -477,7 +513,8 @@
     GKTurnBasedParticipant *nextParticipant;
     nextParticipant = [currentMatch.participants objectAtIndex: ((currentIndex + 1) % [currentMatch.participants count ])];
     [currentMatch endTurnWithNextParticipant:nextParticipant matchData:data completionHandler:^(NSError *error) {}];
-    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenu scene] withColor:ccWHITE]];
+    isPlayersTurn = NO;
+//    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenu scene] withColor:ccWHITE]];
 
 }
 -(void) wonMatch{
@@ -498,7 +535,7 @@
             NSLog(@"%@", error);
         }
     }];
-    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenu scene] withColor:ccWHITE]];
+//    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenu scene] withColor:ccWHITE]];
 
 }
 -(BOOL) isWon{

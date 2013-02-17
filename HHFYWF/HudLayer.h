@@ -10,7 +10,10 @@
 #import "cocos2d.h"
 
 @interface HudLayer : CCLayer {
-    
+    CCLabelTTF * labelSelf;
+    CCLabelTTF *labelThem;
+    int ownWalls, theirWalls;
 }
--(void) updateWithP1Walls: (int)p1WallsLeft andP2Walls:(int)p2WallsLeft;
+
+-(void) updateWithPlayer1: (int)numSelf andPlayer2Walls:(int)numThem;
 @end

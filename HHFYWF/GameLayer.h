@@ -16,6 +16,7 @@
     CCTMXLayer *_background;
     BOOL didMove, placedWall, movedPawn, isPlayersTurn;
     CGPoint pawnAtStartOfTurn;
+    CCSprite *upArrow, *downArrow;
 
 }
 @property (nonatomic, retain) CCTMXTiledMap *tileMap;
