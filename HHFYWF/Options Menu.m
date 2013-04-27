@@ -36,16 +36,15 @@
         CCLabelTTF *label = [CCLabelTTF labelWithString:@"Options" fontName:@"Georgia" fontSize:64];
         // ask director for the window size
 		CGSize size = [[CCDirector sharedDirector] winSize];
-        UIPickerView *pickerController = [UIPickerView new];
-        pickerController.delegate = self;
-        pickerController.dataSource = self;
-        pickerController.frame = CGRectMake(0, size.height/2 , size.width, size.height/2);
-        
         [CCMenuItemFont setFontName:@"Georgia"];
 
         CCMenuItem *mapSelect = [CCMenuItemFont itemWithString: @"Select Map" block:^(id sender){
-            // add a subview that handles the map select
-            [[[CCDirector sharedDirector] view] addSubview:pickerController];
+            UIActionSheet *actSheet = [[UIActionSheet alloc] initWithTitle:@"Tilesets" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Wooden (Default)", @"Minimalist", @"Grass", nil];
+
+            [[[CCDirector sharedDirector] view] addSubview: actSheet];
+            [actSheet showInView:[[CCDirector sharedDirector] view]];
+            [actSheet release];
+
         }];
         CCMenuItem *back = [CCMenuItemFont itemWithString:@"Back" block:^(id sender){
             [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenu scene] withColor:ccBLACK]];
@@ -60,14 +59,10 @@
         
         if([UserPreferences sharedInstance].currentMap == 0){
             currentMap = @"Wooden";
-            [pickerController selectRow:0 inComponent:0 animated:NO];
         }else if ([UserPreferences sharedInstance].currentMap == 1){
-            currentMap = @"Minimal";
-            [pickerController selectRow:1 inComponent:0 animated:NO];
-
+            currentMap = @"Minimalist";
         }else if([UserPreferences sharedInstance].currentMap == 2){
             currentMap = @"Grass";
-            [pickerController selectRow:2 inComponent:0 animated:NO];
 
         }
         
@@ -90,45 +85,69 @@
 -(void)dealloc{
     [super dealloc];
 }
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
 
-- (NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return 3;
-}
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if(buttonIndex == 3){
+        return;
+    }else{
+        [[UserPreferences sharedInstance] setCurrentMap:buttonIndex];
+        if(buttonIndex == 0){
+            currentMap = @"Wooden";
+        }else if (buttonIndex == 1){
+            currentMap = @"Minimalist";
+        }else if (buttonIndex == 2){
+            currentMap = @"Grass";
+        }
+        current.string = [NSString stringWithFormat:@"Currently Selected: %@",currentMap];
 
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    if(row == 0) {
-        return @"Wooden Board (Default)";
     }
-    if(row == 1){
-        return @"Minimal";
-    }
-    if(row ==2){
-        return @"Grass";
-    }
-    return nil;
-}
-
-- (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
     
-    [[UserPreferences sharedInstance] setCurrentMap:row];
-    NSLog(@"%i selected", row);
-    if(row == 0){
-        currentMap = @"Wooden";
-    }else if (row == 1){
-        currentMap = @"Minimal";
-    }else if (row == 2){
-        currentMap = @"Grass";
-    }
-    [pickerView removeFromSuperview];
-    current.string = [NSString stringWithFormat:@"Currently Selected: %@",currentMap];
     
     
 }
+
+
+
+//
+//- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+//{
+//    return 1;
+//}
+//
+//- (NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+//    return 3;
+//}
+//
+//- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+//    if(row == 0) {
+//        return @"Wooden Board (Default)";
+//    }
+//    if(row == 1){
+//        return @"Minimal";
+//    }
+//    if(row ==2){
+//        return @"Grass";
+//    }
+//    return nil;
+//}
+//
+//- (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+//{
+//    
+//    [[UserPreferences sharedInstance] setCurrentMap:row];
+//    NSLog(@"%i selected", row);
+//    if(row == 0){
+//        currentMap = @"Wooden";
+//    }else if (row == 1){
+//        currentMap = @"Minimal";
+//    }else if (row == 2){
+//        currentMap = @"Grass";
+//    }
+//    [pickerView removeFromSuperview];
+//    current.string = [NSString stringWithFormat:@"Currently Selected: %@",currentMap];
+//    
+//    
+//}
 
 
 

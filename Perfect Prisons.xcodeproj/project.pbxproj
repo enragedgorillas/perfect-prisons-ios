@@ -182,6 +182,17 @@
 		77FD54E9171F9A6F00AC49EB /* spritesheetGrass.png in Resources */ = {isa = PBXBuildFile; fileRef = 77FD54E8171F9A6F00AC49EB /* spritesheetGrass.png */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildRule section */
+		77E91B79172B8A1E0067030E /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+			);
+		};
+/* End PBXBuildRule section */
+
 /* Begin PBXFileReference section */
 		77006CD116C8AD7B00E78ABC /* MainMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenu.h; sourceTree = "<group>"; };
 		77006CD216C8AD7B00E78ABC /* MainMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenu.m; sourceTree = "<group>"; };
@@ -1093,6 +1104,7 @@
 				7733393916BC648100843DD7 /* Resources */,
 			);
 			buildRules = (
+				77E91B79172B8A1E0067030E /* PBXBuildRule */,
 			);
 			dependencies = (
 			);

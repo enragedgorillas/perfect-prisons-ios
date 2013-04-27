@@ -142,20 +142,20 @@
                 localPlayer = 1;
             }
         }
-        NSMutableArray *playerIDs = [NSMutableArray arrayWithCapacity:match.participants.count];
-        for (GKTurnBasedParticipant *part in match.participants) {
-            if([part.playerID isKindOfClass:[NSString class]]){
-                [playerIDs addObject:part.playerID];
-            }
-        }
-        
-    
-        [GKPlayer loadPlayersForIdentifiers:playerIDs withCompletionHandler:^(NSArray *players, NSError *error) {
-            [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@ is playing a match with %@", [[players objectAtIndex:0] alias] , [[players objectAtIndex:1] alias]]];
-
-            
-            
-        }];
+//        NSMutableArray *playerIDs = [NSMutableArray arrayWithCapacity:match.participants.count];
+//        for (GKTurnBasedParticipant *part in match.participants) {
+//            if([part.playerID isKindOfClass:[NSString class]]){
+//                [playerIDs addObject:part.playerID];
+//            }
+//        }
+//        
+//    
+//        [GKPlayer loadPlayersForIdentifiers:playerIDs withCompletionHandler:^(NSArray *players, NSError *error) {
+//            [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@ is playing a match with %@", [[players objectAtIndex:0] alias] , [[players objectAtIndex:1] alias]]];
+//
+//            
+//            
+//        }];
 
 
     }else{
@@ -716,7 +716,6 @@
 
     winner.matchOutcome = GKTurnBasedMatchOutcomeWon;
     loser.matchOutcome = GKTurnBasedMatchOutcomeLost;
-    TFLog(@"Someone won a game");
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:currentGameState];
     [currentMatch endMatchInTurnWithMatchData:data completionHandler:^(NSError *error) {
         if (error) {

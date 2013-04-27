@@ -22,16 +22,11 @@
 	// Create the main window
 	window_ = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-#define TESTING 1
-#ifdef TESTING
-    [TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
-#endif
 	[[GCTurnBasedMatchHelper sharedInstance] authenticateLocalUser];
     [GKTurnBasedEventHandler sharedTurnBasedEventHandler].delegate = [GCTurnBasedMatchHelper sharedInstance];
     [UserPreferences sharedInstance];
     
 
-    [TestFlight takeOff:@"34ce36fb35be805d8043cc73d3620ad0_MTgyNzk3MjAxMy0wMi0xNSAxOToxMTo0Ni4wNzk2MTE"];
 
 	// Create an CCGLView with a RGB565 color buffer, and a depth buffer of 0-bits
 	CCGLView *glView = [CCGLView viewWithFrame:[window_ bounds]
