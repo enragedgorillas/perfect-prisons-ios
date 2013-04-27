@@ -12,8 +12,9 @@
 @interface HudLayer : CCLayer {
     CCLabelTTF * labelSelf;
     CCLabelTTF *labelThem;
-    int ownWalls, theirWalls;
+    int ownWalls, theirWalls, localPlayer;
 }
 
 -(void) updateWithPlayer1: (int)numSelf andPlayer2Walls:(int)numThem;
+-(void) player1IsLocal: (BOOL) isLocal;
 @end

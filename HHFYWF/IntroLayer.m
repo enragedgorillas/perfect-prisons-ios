@@ -10,7 +10,7 @@
 // Import the interfaces
 #import "IntroLayer.h"
 #import "MainMenu.h"
-
+#import "GameScene.h"
 
 #pragma mark - IntroLayer
 
@@ -44,7 +44,16 @@
 	CCSprite *background;
 	
 	if( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ) {
-		background = [CCSprite spriteWithFile:@"Default.png"];
+//        if([UIScreen mainScreen].scale == 2.0){
+//            background = [CCSprite spriteWithFile:@"Default@2x.png"];
+//        }
+//		else {
+//            background = [CCSprite spriteWithFile:@"Default.png"];
+//        }
+        background = [CCSprite spriteWithFile:@"Default.png"];
+        if([UIScreen mainScreen].scale == 2.0){
+            background.scale = .5;
+        }
 		background.rotation = 90;
 	} else {
 		background = [CCSprite spriteWithFile:@"Default-Landscape~ipad.png"];
@@ -53,13 +62,14 @@
 
 	// add the label as a child to this Layer
 	[self addChild: background];
-	
+    
 	// In one second transition to the new scene
 	[self scheduleOnce:@selector(makeTransition:) delay:1];
 }
 
 -(void) makeTransition:(ccTime)dt
 {
-	[[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenu scene] withColor:ccWHITE]];
+        
+	[[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenu scene] withColor:ccBLACK]];
 }
 @end

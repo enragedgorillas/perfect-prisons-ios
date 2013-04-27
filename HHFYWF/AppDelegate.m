@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "IntroLayer.h"
 #import "GCTurnBasedMatchHelper.h"
+#import "UserPreferences.h"
 
 @implementation AppController
 
@@ -20,7 +21,17 @@
 {
 	// Create the main window
 	window_ = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+#define TESTING 1
+#ifdef TESTING
+    [TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
+#endif
+	[[GCTurnBasedMatchHelper sharedInstance] authenticateLocalUser];
+    [GKTurnBasedEventHandler sharedTurnBasedEventHandler].delegate = [GCTurnBasedMatchHelper sharedInstance];
+    [UserPreferences sharedInstance];
+    
 
+    [TestFlight takeOff:@"34ce36fb35be805d8043cc73d3620ad0_MTgyNzk3MjAxMy0wMi0xNSAxOToxMTo0Ni4wNzk2MTE"];
 
 	// Create an CCGLView with a RGB565 color buffer, and a depth buffer of 0-bits
 	CCGLView *glView = [CCGLView viewWithFrame:[window_ bounds]
@@ -36,7 +47,7 @@
 	director_.wantsFullScreenLayout = YES;
 
 	// Display FSP and SPF
-	[director_ setDisplayStats:YES];
+	[director_ setDisplayStats:NO];
 
 	// set FPS at 60
 	[director_ setAnimationInterval:1.0/60];
@@ -87,7 +98,6 @@
 	
 	// make main window visible
 	[window_ makeKeyAndVisible];
-	[[GCTurnBasedMatchHelper sharedInstance] authenticateLocalUser];
 	return YES;
 }
 
@@ -99,7 +109,7 @@
 - (NSUInteger)application:(UIApplication*)application supportedInterfaceOrientationsForWindow:(UIWindow*)window
 {
     
-    return UIInterfaceOrientationMaskAllButUpsideDown;
+    return UIInterfaceOrientationMaskLandscape;
 }
 
 

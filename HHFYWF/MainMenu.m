@@ -9,7 +9,9 @@
 #import "MainMenu.h"
 #import "AppDelegate.h"
 #import "GameScene.h"
-
+#import "Options Menu.h"
+#import "HelpScreen.h"
+#import "VictoryScreen.h"
 
 @implementation MainMenu
 +(CCScene *) scene
@@ -35,14 +37,22 @@
 	if( (self=[super init]) ) {
 		
 		// create and initialize a Label
-		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Main Menu" fontName:@"Marker Felt" fontSize:64];
+		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Perfect Prisons" fontName:@"Georgia" fontSize:64];
         
 		// ask director for the window size
 		CGSize size = [[CCDirector sharedDirector] winSize];
         
 		// position the label on the center of the screen
-		label.position =  ccp( size.width /2 , size.height/2 );
-		
+		label.position =  ccp( size.width /2 , size.height - 58 );
+        CCSprite *rightSide = [CCSprite spriteWithFile:@"rightside.png"];
+        rightSide.position = ccp(size.width*3/4 + 20, size.height/2 - 37);
+        rightSide.scale = .8;
+        [self addChild:rightSide];
+        CCSprite *leftSide = [CCSprite spriteWithFile:@"leftpawn.png"];
+        leftSide.position = ccp(size.width*1/4 - 28, size.height/2 - 25);
+        leftSide.scale = .77;
+        [self addChild:leftSide];
+
 		// add the label as a child to this Layer
 		[self addChild: label];
 		
@@ -51,28 +61,32 @@
 		//
 		// Leaderboards and Achievements
 		//
+        [CCMenuItemFont setFontSize:28];
+        [CCMenuItemFont setFontName:@"Georgia"];
+
 		CCMenuItem *newGame = [CCMenuItemFont itemWithString:@"Play Game" block:^(id sender) {
 			
 			
             AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
            [[GCTurnBasedMatchHelper sharedInstance] findMatchWithMinPlayers:2 maxPlayers:2 viewController:app.navController];
-//			[self newGame];
+            
         }];
 		// Default font size will be 28 points.
-		[CCMenuItemFont setFontSize:28];
         CCMenuItem *help = [CCMenuItemFont itemWithString:@"Help" block:^(id sender){
-            UIAlertView* alertView = [[UIAlertView alloc] initWithTitle: @"No Help Menu added yet" message: @"Ask McCall if you need help/instructions for now" delegate: nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
-            [[[CCDirector sharedDirector] view] addSubview: alertView];
-            [alertView show];
-            [alertView release];
+            [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[HelpScreen scene] withColor:ccBLACK]];
+
         }];
         
+        CCMenuItem *options = [CCMenuItemFont itemWithString:@"Options" block:^(id sender){
+            [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:0.3 scene:[OptionsMenu scene] withColor:ccBLACK]];
+
+        }];
 		
 		
-		CCMenu *menu = [CCMenu menuWithItems:newGame, help, nil];
+		CCMenu *menu = [CCMenu menuWithItems:newGame, help, options, nil];
 		
-		[menu alignItemsHorizontallyWithPadding:20];
-		[menu setPosition:ccp( size.width/2, size.height/2 - 60)];
+		[menu alignItemsVerticallyWithPadding:20];
+		[menu setPosition:ccp( size.width/2, size.height/2 - 22)];
 		
 		// Add the menu to the layer
 		[self addChild:menu];
@@ -93,10 +107,6 @@
 }
 -(void)newGame{
     [self scheduleOnce:@selector(makeTransition:) delay:0.1];
-}
--(void) makeTransition:(ccTime)dt
-{
-	[[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[GameScene scene] withColor:ccWHITE]];
 }
 
 

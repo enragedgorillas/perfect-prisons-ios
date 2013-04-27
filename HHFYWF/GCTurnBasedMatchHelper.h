@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <GameKit/GameKit.h>
 
-@interface GCTurnBasedMatchHelper : NSObject <GKTurnBasedMatchmakerViewControllerDelegate> {
+@interface GCTurnBasedMatchHelper : NSObject <GKTurnBasedMatchmakerViewControllerDelegate, GKTurnBasedEventHandlerDelegate, UIAlertViewDelegate>{
     BOOL gameCenterAvailable;
     BOOL userAuthenticated;
     UIViewController *presentingViewController;
@@ -17,6 +17,7 @@
 }
 
 @property (retain) GKTurnBasedMatch * currentMatch;
+@property (nonatomic) BOOL didLaunchWithMatch;
 
 @property (assign, readonly) BOOL gameCenterAvailable;
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="26" height="26" tilewidth="16" tileheight="16">
- <tileset firstgid="1" name="spritesheetTake2" tilewidth="16" tileheight="16">
-  <image source="spritesheetTake2.png" width="64" height="64"/>
+ <tileset firstgid="1" name="Take3" tilewidth="16" tileheight="16">
+  <image source="spritesheetDefault.png" width="80" height="80"/>
  </tileset>
  <layer name="Layer 1" width="26" height="26">
   <data encoding="base64" compression="zlib">
-   eJztkLsOgCAQBA9BeYiR//9atoCeg0hhtphkctnmxojIASIwA26BU+y7n+BqtxH3ICj23Z9G+tg1v6+4ttussxu7sRu7sRu7sdt/u90gb+j2gjLRrQIIEhN/
+   eJxjZGBgYAJibiBmJILNAsSsJKiHsdmAmB0qRgybE4i5SFCPzKYHJsXvlLBJ9Tsl7NFwGw230XAbDbfRcBsNt9FwG57hJgDEgnQIN1EgFiMj3ADDqhR5
   </data>
  </layer>
 </map>

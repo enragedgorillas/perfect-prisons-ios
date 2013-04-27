@@ -32,5 +32,16 @@
     [labelThem setString:[NSString stringWithFormat:@"%i", theirWalls]];
     [labelSelf setString:[NSString stringWithFormat:@"%i", ownWalls]];
 }
-
+-(void)player1IsLocal:(BOOL)isLocal{
+    if(isLocal){
+        localPlayer = 1;
+        labelSelf.color = ccGREEN;
+        labelThem.color = ccRED;
+    }
+    else{
+        localPlayer = 2;
+        labelSelf.color = ccRED;
+        labelThem.color = ccGREEN;
+    }
+}
 @end

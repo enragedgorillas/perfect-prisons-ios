@@ -17,7 +17,8 @@
     BOOL didMove, placedWall, movedPawn, isPlayersTurn;
     CGPoint pawnAtStartOfTurn;
     CCSprite *upArrow, *downArrow;
-
+    int localPlayer;
+    CGPoint gridPosition1;
 }
 @property (nonatomic, retain) CCTMXTiledMap *tileMap;
 @property (nonatomic, retain) CCTMXLayer *mainTileLayer;

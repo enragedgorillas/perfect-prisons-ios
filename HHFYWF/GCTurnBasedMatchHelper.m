@@ -11,7 +11,7 @@
 
 @implementation GCTurnBasedMatchHelper
 @synthesize gameCenterAvailable;
-@synthesize currentMatch;
+@synthesize currentMatch, didLaunchWithMatch;
 
 
 #pragma mark Initialization
@@ -49,6 +49,7 @@ static GCTurnBasedMatchHelper *sharedHelper = nil;
                      object:nil];
         }
     }
+    didLaunchWithMatch = false;
     return self;
 }
 
@@ -109,7 +110,7 @@ static GCTurnBasedMatchHelper *sharedHelper = nil;
      dismissModalViewControllerAnimated:YES];
     NSLog(@"did find match, %@", match);
     self.currentMatch = match;
-    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[GameScene scene] withColor:ccWHITE]];
+    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[GameScene scene] withColor:ccBLACK]];
 
 
 }
@@ -148,6 +149,11 @@ static GCTurnBasedMatchHelper *sharedHelper = nil;
     NSLog(@"playerquitforMatch, %@, %@",
           match, match.currentParticipant);
 }
-
-
+-(void)handleTurnEventForMatch:(GKTurnBasedMatch *)match didBecomeActive:(BOOL)didBecomeActive{
+    if (didBecomeActive){
+        didLaunchWithMatch = true;
+        self.currentMatch = match;
+        [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[GameScene scene] withColor:ccBLACK]];
+    }
+}
 @end
