@@ -9,6 +9,7 @@
 #import "Options Menu.h"
 #import "MainMenu.h"
 #import "UserPreferences.h"
+#import "InAppPurchaseManager.h"
 
 
 @implementation OptionsMenu
@@ -38,21 +39,41 @@
 		CGSize size = [[CCDirector sharedDirector] winSize];
         [CCMenuItemFont setFontName:@"Georgia"];
 
-        CCMenuItem *mapSelect = [CCMenuItemFont itemWithString: @"Select Map" block:^(id sender){
-            UIActionSheet *actSheet = [[UIActionSheet alloc] initWithTitle:@"Tilesets" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Wooden (Default)", @"Minimalist", @"Grass", nil];
+        CCMenuItem *mapSelect = [CCMenuItemFont itemWithString: @"Select Board" block:^(id sender){
+            UIActionSheet *actSheet;
+            if(![[NSUserDefaults standardUserDefaults] valueForKey:@"isFullVersion"]){
+                
+                actSheet = [[UIActionSheet alloc] initWithTitle:@"Tilesets" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Wooden (Default)", nil];
 
+            }else{
+                actSheet = [[UIActionSheet alloc] initWithTitle:@"Tilesets" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Wooden (Default)", @"Minimalist", @"Grass", @"Streets", nil];
+
+            }
             [[[CCDirector sharedDirector] view] addSubview: actSheet];
             [actSheet showInView:[[CCDirector sharedDirector] view]];
             [actSheet release];
 
         }];
+        if(![[NSUserDefaults standardUserDefaults] valueForKey:@"isFullVersion"]){
+            upgrade = [CCMenuItemFont itemWithString:@"Restore Full Version" block:^(id sender){
+                [[InAppPurchaseManager sharedInstance]restoreFullVersion];
+            }];
+            [self schedule: @selector(purchaseUpdate:) interval:0.2];
+
+            
+        }else{
+            upgrade = [CCMenuItemFont itemWithString:@"Full Version Unlocked"];
+            upgrade.isEnabled = NO;
+        }
         CCMenuItem *back = [CCMenuItemFont itemWithString:@"Back" block:^(id sender){
             [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenu scene] withColor:ccBLACK]];
         }];
-        CCMenu *menu = [CCMenu menuWithItems:mapSelect, back, nil];
+        CCMenu *menu = [CCMenu menuWithItems:mapSelect, upgrade, back, nil];
         
-		[menu alignItemsVerticallyWithPadding:60];
-		[menu setPosition:ccp( size.width/2, size.height/2 - 22)];
+		[menu alignItemsVerticallyWithPadding:40];
+		[menu setPosition:ccp( size.width/2, size.height/2 - 37)];
+        
+        
 
 		// position the label on the center of the screen
 		label.position =  ccp( size.width /2 , size.height - 50 );
@@ -64,12 +85,16 @@
         }else if([UserPreferences sharedInstance].currentMap == 2){
             currentMap = @"Grass";
 
+        }else if([UserPreferences sharedInstance].currentMap == 3){
+            currentMap = @"Streets";
+            
         }
+
         
-        current = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"Currently Selected: %@",currentMap] fontName:@"Georgia" fontSize:26];
+        current = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"Currently Selected: %@",currentMap] fontName:@"Georgia" fontSize:22];
         current.color = ccGREEN;
         
-        current.position = ccp(size.width/2, size.height/2 - 5);
+        current.position = ccp(size.width/2, size.height/2 + 13);
 
 		// add the label as a child to this Layer
         [self addChild:current];
@@ -87,69 +112,32 @@
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if(buttonIndex == 3){
-        return;
-    }else{
-        [[UserPreferences sharedInstance] setCurrentMap:buttonIndex];
+        [[UserPreferences sharedInstance] changeMap:buttonIndex];
         if(buttonIndex == 0){
             currentMap = @"Wooden";
         }else if (buttonIndex == 1){
             currentMap = @"Minimalist";
         }else if (buttonIndex == 2){
             currentMap = @"Grass";
+        }else if(buttonIndex == 3){
+            currentMap = @"Streets";
         }
         current.string = [NSString stringWithFormat:@"Currently Selected: %@",currentMap];
-
-    }
     
     
     
 }
+-(void) purchaseUpdate: (ccTime) dt{
+    if(![[NSUserDefaults standardUserDefaults] valueForKey:@"isFullVersion"]){
+        return;
+    }else{
+        [upgrade setString: @"Full Version Unlocked"];
+        upgrade.isEnabled = NO;
+        [self unschedule:@selector(purchaseUpdate:)];
 
+    }
 
-
-//
-//- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-//{
-//    return 1;
-//}
-//
-//- (NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-//    return 3;
-//}
-//
-//- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-//    if(row == 0) {
-//        return @"Wooden Board (Default)";
-//    }
-//    if(row == 1){
-//        return @"Minimal";
-//    }
-//    if(row ==2){
-//        return @"Grass";
-//    }
-//    return nil;
-//}
-//
-//- (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-//{
-//    
-//    [[UserPreferences sharedInstance] setCurrentMap:row];
-//    NSLog(@"%i selected", row);
-//    if(row == 0){
-//        currentMap = @"Wooden";
-//    }else if (row == 1){
-//        currentMap = @"Minimal";
-//    }else if (row == 2){
-//        currentMap = @"Grass";
-//    }
-//    [pickerView removeFromSuperview];
-//    current.string = [NSString stringWithFormat:@"Currently Selected: %@",currentMap];
-//    
-//    
-//}
-
-
+}
 
 
 

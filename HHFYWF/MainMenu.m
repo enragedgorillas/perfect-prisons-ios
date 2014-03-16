@@ -12,6 +12,8 @@
 #import "Options Menu.h"
 #import "HelpScreen.h"
 #import "VictoryScreen.h"
+#import "LocalGameScene.h"
+#import "InAppPurchaseManager.h"
 
 @implementation MainMenu
 +(CCScene *) scene
@@ -42,15 +44,16 @@
 		// ask director for the window size
 		CGSize size = [[CCDirector sharedDirector] winSize];
         
-		// position the label on the center of the screen
 		label.position =  ccp( size.width /2 , size.height - 58 );
+        
         CCSprite *rightSide = [CCSprite spriteWithFile:@"rightside.png"];
-        rightSide.position = ccp(size.width*3/4 + 20, size.height/2 - 37);
+        rightSide.position = ccp(size.width*3/4 + 33, size.height/2 - 49);
         rightSide.scale = .8;
         [self addChild:rightSide];
+        
         CCSprite *leftSide = [CCSprite spriteWithFile:@"leftpawn.png"];
-        leftSide.position = ccp(size.width*1/4 - 28, size.height/2 - 25);
-        leftSide.scale = .77;
+        leftSide.position = ccp(size.width*1/4 - 48, size.height/2 - 38);
+        leftSide.scale = .90;
         [self addChild:leftSide];
 
 		// add the label as a child to this Layer
@@ -58,13 +61,10 @@
 		
 		
 		
-		//
-		// Leaderboards and Achievements
-		//
         [CCMenuItemFont setFontSize:28];
         [CCMenuItemFont setFontName:@"Georgia"];
 
-		CCMenuItem *newGame = [CCMenuItemFont itemWithString:@"Play Game" block:^(id sender) {
+		CCMenuItem *newGame = [CCMenuItemFont itemWithString:@"Play Online Match" block:^(id sender) {
 			
 			
             AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
@@ -73,20 +73,39 @@
         }];
 		// Default font size will be 28 points.
         CCMenuItem *help = [CCMenuItemFont itemWithString:@"Help" block:^(id sender){
-            [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[HelpScreen scene] withColor:ccBLACK]];
+            [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:0.4 scene:[HelpScreen scene] withColor:ccBLACK]];
+            
+
 
         }];
         
         CCMenuItem *options = [CCMenuItemFont itemWithString:@"Options" block:^(id sender){
             [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:0.3 scene:[OptionsMenu scene] withColor:ccBLACK]];
 
+
         }];
+        CCMenuItem *newLocalGame = [CCMenuItemFont itemWithString:@"Play Local Match" block:^(id sender) {
+            
+			if([[NSUserDefaults standardUserDefaults]valueForKey:@"isFullVersion"]){
+                [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:0.8 scene:[LocalGameScene scene] withColor:ccBLACK]];
+
+            }else{
+                UIAlertView *upgradeAlertView = [[UIAlertView alloc] initWithTitle: @"Local Match Requires Full Version" message: @"Would you like to upgrade to the full version ($0.99)? It includes the ability to play local matches, in addition to new board backgrounds." delegate: self cancelButtonTitle: @"No" otherButtonTitles: @"Yes", nil];
+                [[[CCDirector sharedDirector] view] addSubview: upgradeAlertView];
+                [upgradeAlertView show];
+                [upgradeAlertView release];
+                return;
+
+            }
+ 
+    
+        }];
+
 		
-		
-		CCMenu *menu = [CCMenu menuWithItems:newGame, help, options, nil];
+		CCMenu *menu = [CCMenu menuWithItems:newGame, newLocalGame, help, options, nil];
 		
 		[menu alignItemsVerticallyWithPadding:20];
-		[menu setPosition:ccp( size.width/2, size.height/2 - 22)];
+		[menu setPosition:ccp( size.width/2, size.height/2 - 40)];
 		
 		// Add the menu to the layer
 		[self addChild:menu];
@@ -108,7 +127,16 @@
 -(void)newGame{
     [self scheduleOnce:@selector(makeTransition:) delay:0.1];
 }
+-(void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex{
+    if(buttonIndex == 0){
+        return;
+    }else{
+        if ([[InAppPurchaseManager sharedInstance] canMakePurchases]){
+            [[InAppPurchaseManager sharedInstance] purchaseFullVersion];
+        }
 
+    }
+}
 
 
 

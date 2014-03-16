@@ -148,6 +148,7 @@ static GCTurnBasedMatchHelper *sharedHelper = nil;
 
     NSLog(@"playerquitforMatch, %@, %@",
           match, match.currentParticipant);
+    
 }
 -(void)handleTurnEventForMatch:(GKTurnBasedMatch *)match didBecomeActive:(BOOL)didBecomeActive{
     if (didBecomeActive){

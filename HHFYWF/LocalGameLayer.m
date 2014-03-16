@@ -6,13 +6,11 @@
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 //
 
-#import "GameLayer.h"
-#import "HudLayer.h"
-#import <GameKit/GameKit.h>
+#import "LocalGameLayer.h"
+#import "LocalHudLayer.h"
 #import "Wall.h"
 #import "Pawn.h"
 #import "PathfinderClass.h"
-#import "GCTurnBasedMatchHelper.h"
 #import "MainMenu.h"
 #import "UserPreferences.h"
 #import "VictoryScreen.h"
@@ -41,36 +39,36 @@
  * NEW DEFINES FOR SPRITESHEET TAKE 3
  */
 
- #define UPLEFTBLANKSPACE 1
- #define UPRIGHTBLANKSPACE 2
- #define DOWNLEFTBLANKSPACE 6
- #define DOWNRIGHTBLANKSPACE 7
- #define UPLEFTSELFPAWNSPACE 16
- #define UPRIGHTSELFPAWNSPACE 17
- #define DOWNLEFTSELFPAWNSPACE 21
- #define DOWNRIGHTSELFPAWNSPACE 22
- #define UPLEFTOTHERPAWNSPACE 4
- #define UPRIGHTOTHERPAWNSPACE 5
- #define DOWNLEFTOTHERPAWNSPACE 9
- #define DOWNRIGHTOTHERPAWNSPACE 10
- #define BLANK 11
- #define LEFTWALLSPACE 12
- #define RIGHTWALLSPACE 15
- #define TOPWALLSPACE 3
- #define BOTTOMWALLSPACE 18
- #define VERTICALWALLSPACE 8
- #define HORIZONTALWALLSPACE 14
- #define FOURWAYWALLCROSS 13
+#define UPLEFTBLANKSPACE 1
+#define UPRIGHTBLANKSPACE 2
+#define DOWNLEFTBLANKSPACE 6
+#define DOWNRIGHTBLANKSPACE 7
+#define UPLEFTSELFPAWNSPACE 16
+#define UPRIGHTSELFPAWNSPACE 17
+#define DOWNLEFTSELFPAWNSPACE 21
+#define DOWNRIGHTSELFPAWNSPACE 22
+#define UPLEFTOTHERPAWNSPACE 4
+#define UPRIGHTOTHERPAWNSPACE 5
+#define DOWNLEFTOTHERPAWNSPACE 9
+#define DOWNRIGHTOTHERPAWNSPACE 10
+#define BLANK 11
+#define LEFTWALLSPACE 12
+#define RIGHTWALLSPACE 15
+#define TOPWALLSPACE 3
+#define BOTTOMWALLSPACE 18
+#define VERTICALWALLSPACE 8
+#define HORIZONTALWALLSPACE 14
+#define FOURWAYWALLCROSS 13
 
 
 
- 
+
 
 #define ISINPAWNSPACE ((((int)tilePoint.y % 3) == 0) ||(((int)tilePoint.y-1)%3) == 0)&&((((int)tilePoint.x % 3) == 0) ||(((int)tilePoint.x-1)%3) == 0)
 #define ISINWALLSPACE ((((int)tilePoint.x %3) == 2) ||(((int)tilePoint.y%3) == 2)&&(!(((int)tilePoint.x %3) == 2) &&(((int)tilePoint.y%3) == 2)))
 
 
-@implementation GameLayer
+@implementation LocalGameLayer
 @synthesize mainTileLayer = _mainTileLayer, tileMap = _tileMap, hudLayer = _hudLayer, currentGameState;
 
 -(id) init
@@ -91,10 +89,11 @@
             self.tileMap = [CCTMXTiledMap tiledMapWithTMXFile:@"StreetMap.tmx"];
         }
 
+        
         self.mainTileLayer = [_tileMap layerNamed:@"Layer 1"];
         
         [self addChild:_tileMap z:-1];
-        self.hudLayer = [HudLayer node];
+        self.hudLayer = [LocalHudLayer node];
         [self addChild:_hudLayer z:2];
         upArrow = [CCSprite spriteWithFile:@"uparrow.png"];
         [upArrow setPosition:ccp(size.width -31, size.height - 30)];
@@ -110,12 +109,11 @@
     currentGameState = [[GameState alloc]initWithNewMatch];
     //new match
     
-    [self initWithTurnBasedMatch:[[GCTurnBasedMatchHelper sharedInstance] currentMatch]];
     [self.hudLayer updateWithPlayer1:currentGameState.p1WallsRemaining andPlayer2Walls:currentGameState.p2WallsRemaining];
     [CCMenuItemFont setFontName:@"Marker Felt"];
     CCMenuItem *back = [CCMenuItemFont itemWithString:@"BACK" block:^(id sender){
         [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenu scene] withColor:ccBLACK]];
-
+        
     }];
     CCMenu *backMenu = [CCMenu menuWithItems:back, nil];
     [backMenu alignItemsVerticallyWithPadding:20];
@@ -124,77 +122,30 @@
     if([[UIScreen mainScreen] bounds].size.height == 568){
         NSLog(@"iPhone5");
         [_tileMap setPosition: ccpAdd(_tileMap.position, CGPointMake(77,0))];
-        if(localPlayer == 1) {
-            leftImageGreen = [CCSprite spriteWithFile:@"goalGreen->Top.png"];
-
-        }else{
-            leftImageGreen = [CCSprite spriteWithFile:@"goalGreen->Bot.png"];
-
-        }
+        leftImageGreen = [CCSprite spriteWithFile:@"goalGreen->Top.png"];
         leftImageGreen.position = CGPointMake(38, size.height/2);
         [self addChild:leftImageGreen];
-        
+        leftImageRed = [CCSprite spriteWithFile:@"goalRed->Bot.png"];
+        leftImageRed.position = CGPointMake(38, size.height/2);
+        [self addChild:leftImageRed];
+        [leftImageRed setVisible:NO];
+
     }
+    UIAlertView *localGameAlertView = [[UIAlertView alloc] initWithTitle: @"Local Match" message: @"The green player goes first. Pass the device to the other player after each turn." delegate: self cancelButtonTitle: @"OK" otherButtonTitles: nil];
+    [[[CCDirector sharedDirector] view] addSubview: localGameAlertView];
+    [localGameAlertView show];
+    [localGameAlertView release];
 
     return self;
 }
 
--(void) initWithTurnBasedMatch:(GKTurnBasedMatch *) match{
-    
-    //check here if is new match
-    GKTurnBasedParticipant *firstParticipant = [match.participants objectAtIndex:0];
-    
-    // If there is a player
-    if(firstParticipant.lastTurnDate){
-        currentGameState = [[NSKeyedUnarchiver unarchiveObjectWithData:match.matchData] retain];
-        if ([match.currentParticipant.playerID isEqualToString:[GKLocalPlayer localPlayer].playerID]) {
-            isPlayersTurn = YES;
-            localPlayer = currentGameState.currentPlayer;
-        }
-        else{
-            isPlayersTurn = NO;
-            if(currentGameState.currentPlayer ==1){
-                localPlayer = 2;
-            }else{
-                localPlayer = 1;
-            }
-        }
-//        NSMutableArray *playerIDs = [NSMutableArray arrayWithCapacity:match.participants.count];
-//        for (GKTurnBasedParticipant *part in match.participants) {
-//            if([part.playerID isKindOfClass:[NSString class]]){
-//                [playerIDs addObject:part.playerID];
-//            }
-//        }
-//        
-//    
-//        [GKPlayer loadPlayersForIdentifiers:playerIDs withCompletionHandler:^(NSArray *players, NSError *error) {
-//            [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@ is playing a match with %@", [[players objectAtIndex:0] alias] , [[players objectAtIndex:1] alias]]];
-//
-//            
-//            
-//        }];
-
-
-    }else{
-        isPlayersTurn = YES;
-        localPlayer = 1;
-    }
-    [self.hudLayer player1IsLocal:localPlayer==1];
-    [self movePawnFrom: CGPointMake(4, 8) to:CGPointMake(currentGameState.player1Pawn.x, currentGameState.player1Pawn.y) isPlayerSelf:(localPlayer == 1) isSwap:NO];
-    [self movePawnFrom: CGPointMake(4, 0) to:CGPointMake(currentGameState.player2Pawn.x, currentGameState.player2Pawn.y) isPlayerSelf:(localPlayer == 2) isSwap:NO];
-    for(Wall * walls in currentGameState.wallArray){
-        [self addVisualWall:walls];
-    }
-    
-    //return self;
-}
 
 -(void) dealloc{
     self.mainTileLayer = nil;
     self.tileMap = nil;
     _background = nil;
     self.hudLayer = nil;
-//    self.currentGameState = nil;
+    //    self.currentGameState = nil;
     [super dealloc];
 }
 
@@ -215,7 +166,7 @@
     
     touchLocation = [[CCDirector sharedDirector] convertToGL: touchLocation];
     prevLocation = [[CCDirector sharedDirector] convertToGL: prevLocation];
-        
+    
     CGPoint diff = (CGPointMake(0, touchLocation.y-prevLocation.y)); //ccpSub(touchLocation,prevLocation);
     [_tileMap setPosition: ccpAdd(_tileMap.position, CGPointMake(round(diff.x),round(diff.y)))];
     
@@ -225,16 +176,16 @@
     }else{
         [downArrow setVisible:NO];
         [_tileMap setPosition: CGPointMake(_tileMap.position.x,0)];
-
+        
     }
     if (_tileMap.position.y < -100) {
         [upArrow setVisible:NO];
         [_tileMap setPosition: CGPointMake(_tileMap.position.x,-100)];
-
+        
     }else{
         [upArrow setVisible:YES];
     }
-
+    
     didMove = YES;
 }
 
@@ -247,13 +198,11 @@
     if(didMove){
         return;
     }
-    if(!isPlayersTurn){
-        return;
-    }
     placedWall = NO;
     movedPawn = NO;
     CGPoint touchLocation = [touch locationInView: [touch view]];
     CGPoint tileLocation = [self tilePosFromLocation:touchLocation tileMap:_tileMap];
+    
     BOOL isWall, isHorizontal;
     CGPoint gridPosition = [self gridPointFromTile:tileLocation andIsWall:&isWall andHorizontal:&isHorizontal];
     gridPosition1 = gridPosition;
@@ -293,7 +242,7 @@
             //move pawn in game state representation
             if(((currentGameState.player1Pawn.x - gridPosition.x == 1 || currentGameState.player1Pawn.x - gridPosition.x == -1)&& currentGameState.player1Pawn.y == gridPosition.y)){
                 if((currentGameState.player1Pawn.y - gridPosition.y == -1 || currentGameState.player1Pawn.x - gridPosition.x == -1)){
-                   [currentGameState movePawn:1 inDirection:RIGHT];
+                    [currentGameState movePawn:1 inDirection:RIGHT];
                 }else{
                     [currentGameState movePawn:1 inDirection:LEFT];
                 }
@@ -303,10 +252,10 @@
                 }else{
                     [currentGameState movePawn:1 inDirection:UP];
                 }
-
+                
             }
             //move pawn visual
-            [self movePawnFrom:prevPawnPosition to:gridPosition isPlayerSelf:YES isSwap:NO];
+            [self movePawnFrom:prevPawnPosition to:gridPosition isPlayer1:YES isSwap:NO];
             movedPawn = YES;
             
             
@@ -321,7 +270,7 @@
                 [swapAlertView release];
                 return;
             }
-
+            
             pawnAtStartOfTurn = prevPawnPosition;
             if(((currentGameState.player2Pawn.x - gridPosition.x == 1 || currentGameState.player2Pawn.x - gridPosition.x == -1)&& currentGameState.player2Pawn.y == gridPosition.y)){
                 if((currentGameState.player2Pawn.y - gridPosition.y == -1 || currentGameState.player2Pawn.x - gridPosition.x == -1)){
@@ -338,14 +287,14 @@
                 
             }
             //move pawn visual
-            [self movePawnFrom:prevPawnPosition to:gridPosition isPlayerSelf:YES isSwap:NO];
+            [self movePawnFrom:prevPawnPosition to:gridPosition isPlayer1:NO isSwap:NO];
             movedPawn = YES;
-
+            
         }
-
+        
     }
     [self.hudLayer updateWithPlayer1:currentGameState.p1WallsRemaining andPlayer2Walls:currentGameState.p2WallsRemaining];
-
+    
     if([self isWon]){
         [self wonMatch];
         return;
@@ -360,9 +309,9 @@
         [[[CCDirector sharedDirector] view] addSubview: endTurnAlertView];
         [endTurnAlertView show];
         [endTurnAlertView release];
-
+        
     }
-
+    
     
 }
 -(CGPoint) tilePosFromLocation:(CGPoint)location tileMap:(CCTMXTiledMap*)tileMap
@@ -378,10 +327,10 @@
     
     float scaledWidthPerThree = tileMap.tileSize.width * 3/CC_CONTENT_SCALE_FACTOR();
     float scaledHeightPerThree = tileMap.tileSize.height * 3/CC_CONTENT_SCALE_FACTOR();
-    
+
     int Xgroup = (int)(pos.x/scaledWidthPerThree);
     int Ygroup = (int)(pos.y/scaledHeightPerThree);
-    
+
     CGPoint posWithinGroup;
     
     posWithinGroup = ccpSub(pos, CGPointMake(Xgroup*scaledWidthPerThree, Ygroup*scaledHeightPerThree));
@@ -405,28 +354,27 @@
         endPointGroup.y = 2;
     }
     
-    
+
     
     CGPoint endPos;
     endPos.x = endPointGroup.x + 3*Xgroup;
     endPos.y = endPointGroup.y + 3*Ygroup;
     endPos.y = (int)(tileMap.mapSize.height - endPos.y) - 1;
-    
-    //    pos.x = (int)(pos.x / scaledWidth);
-    //	pos.y = (int)((tileMap.mapSize.height * tileMap.tileSize.height - pos.y) / scaledHeight);
+
+//    pos.x = (int)(pos.x / scaledWidth);
+//	pos.y = (int)((tileMap.mapSize.height * tileMap.tileSize.height - pos.y) / scaledHeight);
 	
-    //	CCLOG(@"touch at (%.0f, %.0f) is at tileCoord (%i, %i)", location.x, location.y, (int)pos.x, (int)pos.y);
+//	CCLOG(@"touch at (%.0f, %.0f) is at tileCoord (%i, %i)", location.x, location.y, (int)pos.x, (int)pos.y);
     CCLOG(@"Newtouch at (%.0f, %.0f) is at tileCoord (%i, %i)", location.x, location.y, (int)endPos.x, (int)endPos.y);
-    
+
     
 	// make sure coordinates are within bounds
 	endPos.x = fminf(fmaxf(endPos.x, 0), tileMap.mapSize.width - 1);
 	endPos.y = fminf(fmaxf(endPos.y, 0), tileMap.mapSize.height - 1);
-    
+
 	
 	return endPos;
 }
-
 -(CGPoint) tilePointFromGridPoint:(CGPoint)gridPoint andIsWall:(BOOL)isWall andHorizontal:(BOOL)isHorizontal{
     int topLeftX, topLeftY;
     
@@ -478,19 +426,10 @@
         if((oldWall.topLeftPointY == wall.topLeftPointY +1 || oldWall.topLeftPointY == wall.topLeftPointY -1) && (wall.topLeftPointX == oldWall.topLeftPointX) && (oldWall.isVertical == YES && wall.isVertical == YES)){
             return NO;
         }
-
+        
     }
     if(currentGameState.currentPlayer == 1){
-        if(currentGameState.p1WallsRemaining == 0){
-            UIAlertView *badWall = [[UIAlertView alloc] initWithTitle: @"Illegal Wall" message: @"You have no walls left" delegate: self cancelButtonTitle: @"Ok" otherButtonTitles: nil];
-            [[[CCDirector sharedDirector] view] addSubview: badWall];
-            [badWall show];
-            [badWall release];
-            return NO;
-
-        }
-    }else{
-        if(currentGameState.p2WallsRemaining == 0){
+        if(currentGameState.p1WallsRemaining < 0){
             UIAlertView *badWall = [[UIAlertView alloc] initWithTitle: @"Illegal Wall" message: @"You have no walls left" delegate: self cancelButtonTitle: @"Ok" otherButtonTitles: nil];
             [[[CCDirector sharedDirector] view] addSubview: badWall];
             [badWall show];
@@ -498,7 +437,16 @@
             return NO;
             
         }
-
+    }else{
+        if(currentGameState.p2WallsRemaining < 0){
+            UIAlertView *badWall = [[UIAlertView alloc] initWithTitle: @"Illegal Wall" message: @"You have no walls left" delegate: self cancelButtonTitle: @"Ok" otherButtonTitles: nil];
+            [[[CCDirector sharedDirector] view] addSubview: badWall];
+            [badWall show];
+            [badWall release];
+            return NO;
+            
+        }
+        
     }
     return YES;
     
@@ -516,7 +464,7 @@
     validHorizontalMove = ((pawn.x - move.x == 1 || pawn.x - move.x == -1)&& pawn.y == move.y);
     validVerticalMove= ((pawn.y - move.y == 1 || pawn.y - move.y == -1)&& pawn.x == move.x);
     positiveMove = (pawn.y - move.y == -1 || pawn.x - move.x == -1);
-//    negativeMove = (pawn.y - move.y == 1 || pawn.x - move.x == 1);
+    //    negativeMove = (pawn.y - move.y == 1 || pawn.x - move.x == 1);
     Wall* walls;
     if(validHorizontalMove){
         for(int i = 0; i<[currentGameState.wallArray count]; i++){
@@ -530,14 +478,14 @@
                     if(walls.topLeftPointX == pawn.x - 1 && (walls.topLeftPointY == pawn.y || walls.topLeftPointY == pawn.y - 1)){
                         isValid = NO;
                     }
-
+                    
                 }
             }
         }
     }else if(validVerticalMove){
         for(int i = 0; i<[currentGameState.wallArray count]; i++){
             walls = (Wall*)[currentGameState.wallArray objectAtIndex:i];
-
+            
             if(!walls.isVertical){
                 if(positiveMove){
                     if(walls.topLeftPointY == pawn.y && (walls.topLeftPointX == pawn.x || walls.topLeftPointX == pawn.x - 1)){
@@ -548,7 +496,7 @@
                         isValid = NO;
                     }
                 }
-
+                
             }
         }
     }else{
@@ -559,22 +507,34 @@
     
     
 }
--(void) movePawnFrom: (CGPoint) fromPoint to:(CGPoint) toPoint isPlayerSelf: (BOOL) isPlayerSelf isSwap: (BOOL) isSwap{
+-(void) movePawnFrom: (CGPoint) fromPoint to:(CGPoint) toPoint isPlayer1: (BOOL) isPlayer1 isSwap: (BOOL) isSwap{
     CGPoint topLeftFrom, topLeftTo;
     topLeftFrom = [self tilePointFromGridPoint:fromPoint andIsWall:NO andHorizontal:NO];
     topLeftTo = [self tilePointFromGridPoint:toPoint andIsWall:NO andHorizontal:NO];
     
     if (isSwap) {
-        [_mainTileLayer setTileGID:UPLEFTSELFPAWNSPACE at:topLeftTo];
-        [_mainTileLayer setTileGID:UPRIGHTSELFPAWNSPACE at:CGPointMake(topLeftTo.x + 1, topLeftTo.y)];
-        [_mainTileLayer setTileGID:DOWNRIGHTSELFPAWNSPACE at:CGPointMake(topLeftTo.x + 1, topLeftTo.y + 1)];
-        [_mainTileLayer setTileGID:DOWNLEFTSELFPAWNSPACE at:CGPointMake(topLeftTo.x, topLeftTo.y +1)];
-        [_mainTileLayer setTileGID:UPLEFTOTHERPAWNSPACE at:topLeftFrom];
-        [_mainTileLayer setTileGID:UPRIGHTOTHERPAWNSPACE at:CGPointMake(topLeftFrom.x + 1, topLeftFrom.y)];
-        [_mainTileLayer setTileGID:DOWNRIGHTOTHERPAWNSPACE at:CGPointMake(topLeftFrom.x + 1, topLeftFrom.y + 1)];
-        [_mainTileLayer setTileGID:DOWNLEFTOTHERPAWNSPACE at:CGPointMake(topLeftFrom.x, topLeftFrom.y +1)];
-        return;
+        if(isPlayer1) {
+            [_mainTileLayer setTileGID:UPLEFTSELFPAWNSPACE at:topLeftTo];
+            [_mainTileLayer setTileGID:UPRIGHTSELFPAWNSPACE at:CGPointMake(topLeftTo.x + 1, topLeftTo.y)];
+            [_mainTileLayer setTileGID:DOWNRIGHTSELFPAWNSPACE at:CGPointMake(topLeftTo.x + 1, topLeftTo.y + 1)];
+            [_mainTileLayer setTileGID:DOWNLEFTSELFPAWNSPACE at:CGPointMake(topLeftTo.x, topLeftTo.y +1)];
+            [_mainTileLayer setTileGID:UPLEFTOTHERPAWNSPACE at:topLeftFrom];
+            [_mainTileLayer setTileGID:UPRIGHTOTHERPAWNSPACE at:CGPointMake(topLeftFrom.x + 1, topLeftFrom.y)];
+            [_mainTileLayer setTileGID:DOWNRIGHTOTHERPAWNSPACE at:CGPointMake(topLeftFrom.x + 1, topLeftFrom.y + 1)];
+            [_mainTileLayer setTileGID:DOWNLEFTOTHERPAWNSPACE at:CGPointMake(topLeftFrom.x, topLeftFrom.y +1)];
+        }else{
+            [_mainTileLayer setTileGID:UPLEFTOTHERPAWNSPACE at:topLeftTo];
+            [_mainTileLayer setTileGID:UPRIGHTOTHERPAWNSPACE at:CGPointMake(topLeftTo.x + 1, topLeftTo.y)];
+            [_mainTileLayer setTileGID:DOWNRIGHTOTHERPAWNSPACE at:CGPointMake(topLeftTo.x + 1, topLeftTo.y + 1)];
+            [_mainTileLayer setTileGID:DOWNLEFTOTHERPAWNSPACE at:CGPointMake(topLeftTo.x, topLeftTo.y +1)];
+            [_mainTileLayer setTileGID:UPLEFTSELFPAWNSPACE at:topLeftFrom];
+            [_mainTileLayer setTileGID:UPRIGHTSELFPAWNSPACE at:CGPointMake(topLeftFrom.x + 1, topLeftFrom.y)];
+            [_mainTileLayer setTileGID:DOWNRIGHTSELFPAWNSPACE at:CGPointMake(topLeftFrom.x + 1, topLeftFrom.y + 1)];
+            [_mainTileLayer setTileGID:DOWNLEFTSELFPAWNSPACE at:CGPointMake(topLeftFrom.x, topLeftFrom.y +1)];
 
+        }   
+        return;
+        
     }
     
     //blank the old space
@@ -584,7 +544,7 @@
     [_mainTileLayer setTileGID:DOWNLEFTBLANKSPACE at:CGPointMake(topLeftFrom.x, topLeftFrom.y +1)];
     
     //put a pawn in the new space
-    if(isPlayerSelf){
+    if(isPlayer1){
         [_mainTileLayer setTileGID:UPLEFTSELFPAWNSPACE at:topLeftTo];
         [_mainTileLayer setTileGID:UPRIGHTSELFPAWNSPACE at:CGPointMake(topLeftTo.x + 1, topLeftTo.y)];
         [_mainTileLayer setTileGID:DOWNRIGHTSELFPAWNSPACE at:CGPointMake(topLeftTo.x + 1, topLeftTo.y + 1)];
@@ -594,10 +554,10 @@
         [_mainTileLayer setTileGID:UPRIGHTOTHERPAWNSPACE at:CGPointMake(topLeftTo.x + 1, topLeftTo.y)];
         [_mainTileLayer setTileGID:DOWNRIGHTOTHERPAWNSPACE at:CGPointMake(topLeftTo.x + 1, topLeftTo.y + 1)];
         [_mainTileLayer setTileGID:DOWNLEFTOTHERPAWNSPACE at:CGPointMake(topLeftTo.x, topLeftTo.y +1)];
-
+        
     }
-
-
+    
+    
     
 }
 -(void) addVisualWall:(Wall *) wall{
@@ -614,7 +574,7 @@
         }
         [_mainTileLayer setTileGID:VERTICALWALLSPACE at:(CGPointMake(top.x, top.y +3))];
         [_mainTileLayer setTileGID:BOTTOMWALLSPACE at:(CGPointMake(top.x, top.y +4))];
-
+        
     }else{
         CGPoint left = [self tilePointFromGridPoint:(CGPointMake(wall.topLeftPointX, wall.topLeftPointY)) andIsWall:YES andHorizontal:YES];
         [_mainTileLayer setTileGID:LEFTWALLSPACE at:left];
@@ -626,11 +586,11 @@
             
             [_mainTileLayer setTileGID:HORIZONTALWALLSPACE at:(CGPointMake(left.x+2, left.y))];
         }
-
+        
         [_mainTileLayer setTileGID:HORIZONTALWALLSPACE at:(CGPointMake(left.x+3, left.y))];
         [_mainTileLayer setTileGID:RIGHTWALLSPACE at:(CGPointMake(left.x+4, left.y))];
     }
-
+    
 }
 -(void) removeVisualWall:(Wall *) wall{
     if(wall.isVertical){
@@ -649,7 +609,7 @@
         [_mainTileLayer setTileGID:BLANK at:(CGPointMake(left.x+4, left.y))];
         
     }
-
+    
 }
 
 -(void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex{
@@ -683,7 +643,7 @@
                     }
                     
                 }
-                [self movePawnFrom:prevPawnPosition to:gridPosition1 isPlayerSelf:YES isSwap:YES];
+                [self movePawnFrom:prevPawnPosition to:gridPosition1 isPlayer1:YES isSwap:YES];
                 
             }
             else if(currentGameState.currentPlayer ==2){
@@ -706,10 +666,10 @@
                     }
                     
                 }
-                [self movePawnFrom:prevPawnPosition to:gridPosition1 isPlayerSelf:YES isSwap:YES];
-                    
+                [self movePawnFrom:prevPawnPosition to:gridPosition1 isPlayer1:NO isSwap:YES];
                 
-
+                
+                
             }
             [self endTurn];
         }
@@ -717,6 +677,7 @@
 }
 
 -(void) undoLastMove:(BOOL) isSwap{
+    BOOL isplayer1;
     if(placedWall){
         [self removeVisualWall:[currentGameState.wallArray lastObject]];
         [currentGameState removeLastWall];
@@ -727,56 +688,33 @@
             currentPawnPosition = CGPointMake(currentGameState.player1Pawn.x, currentGameState.player1Pawn.y);
             currentGameState.player1Pawn.x = prevPawnPosition.x;
             currentGameState.player1Pawn.y = prevPawnPosition.y;
+            isplayer1 = YES;
         }else{
             currentPawnPosition = CGPointMake(currentGameState.player2Pawn.x, currentGameState.player2Pawn.y);
             currentGameState.player2Pawn.x = prevPawnPosition.x;
             currentGameState.player2Pawn.y = prevPawnPosition.y;
-
-
-        }
-        [self movePawnFrom:currentPawnPosition to:prevPawnPosition isPlayerSelf:YES isSwap:(isSwap)];
+            isplayer1 = NO;
+            
+            
+        }        
+        [self movePawnFrom:currentPawnPosition to:prevPawnPosition isPlayer1:isplayer1 isSwap:(isSwap)];
     }
 }
 -(void) endTurn{
-    GKTurnBasedMatch *currentMatch = [[GCTurnBasedMatchHelper sharedInstance] currentMatch];
     if(currentGameState.currentPlayer == 1){
         currentGameState.currentPlayer = 2;
+        [leftImageGreen setVisible:NO];
+        [leftImageRed setVisible:YES];
     }else{
         currentGameState.currentPlayer = 1;
+        [leftImageGreen setVisible:YES];
+        [leftImageRed setVisible:NO];
     }
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:currentGameState];
-    NSLog(@"%i",data.length);
-    NSUInteger currentIndex = [currentMatch.participants indexOfObject:currentMatch.currentParticipant];
-    GKTurnBasedParticipant *nextParticipant;
-    nextParticipant = [currentMatch.participants objectAtIndex: ((currentIndex + 1) % [currentMatch.participants count ])];
-    [currentMatch endTurnWithNextParticipant:nextParticipant matchData:data completionHandler:^(NSError *error) {}];
-    isPlayersTurn = NO;
-//    [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[MainMenu scene] withColor:ccBlack]];
-
 }
 -(void) wonMatch{
-    GKTurnBasedMatch *currentMatch = [[GCTurnBasedMatchHelper sharedInstance] currentMatch];
-    GKTurnBasedParticipant *winner, *loser;
     
-    if(currentGameState.currentPlayer == 1){
-        winner = currentMatch.participants[0];
-        loser = currentMatch.participants[1];
-    }else{
-        winner = currentMatch.participants[1];
-        loser = currentMatch.participants[0];
-    }
-
-    winner.matchOutcome = GKTurnBasedMatchOutcomeWon;
-    loser.matchOutcome = GKTurnBasedMatchOutcomeLost;
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:currentGameState];
-    [currentMatch endMatchInTurnWithMatchData:data completionHandler:^(NSError *error) {
-        if (error) {
-            NSLog(@"%@", error);
-        }
-        
-    }];
     [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:1.0 scene:[VictoryScreen scene] withColor:ccWHITE]];
-
+    
 }
 -(BOOL) isWon{
     if(currentGameState.currentPlayer == 1){

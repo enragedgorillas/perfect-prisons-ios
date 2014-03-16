@@ -20,40 +20,24 @@ static UserPreferences *sharedPreferences = nil;
 
 -(id) init{
     if(self = [super init]){
-        NSString *path;
-        path = [NSString stringWithFormat:@"%@/Library/Preferences/MapSelect.plist",NSHomeDirectory()];
-        NSFileManager *objFileManager = [NSFileManager defaultManager];
-        if(![objFileManager fileExistsAtPath:path]){
-            [self changeMap:0];
-        }else{
-            [self getSavedPreferences];
-        }
+        [self getSavedPreferences];
     }
     return self;
 }
 -(void) getSavedPreferences{
-    NSString *path;
-    NSMutableDictionary *objDictionary;
-
-    path = [NSString stringWithFormat:@"%@/Library/Preferences/MapSelect.plist",NSHomeDirectory()];
-    NSFileManager *objFileManager = [NSFileManager defaultManager];
-    objDictionary = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
-    if([objFileManager fileExistsAtPath:path]){
-        if(objDictionary != NULL){
-            currentMap = [objDictionary objectForKey:@"Map Number"];
-        }
+    if([[NSUserDefaults standardUserDefaults] valueForKey:@"MapSelect"]){
+        currentMap =[[NSUserDefaults standardUserDefaults] integerForKey:@"MapSelect"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }else{
+        currentMap = 0;
     }
-
 }
+
+
 -(void)changeMap:(int)newMapNum{
-    NSString *path;
-    NSMutableDictionary *objDictionary;
-    
-    path = [NSString stringWithFormat:@"%@/Library/Preferences/myfile.plist",NSHomeDirectory()];
-    objDictionary = [NSMutableDictionary dictionary];
-    
-    [objDictionary setValue:newMapNum forKey:@"Map Number"];
-    [objDictionary writeToFile:path atomically:NO];
+    [[NSUserDefaults standardUserDefaults] setInteger:newMapNum forKey:@"MapSelect"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
     currentMap = newMapNum;
 
 }

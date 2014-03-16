@@ -12,6 +12,7 @@
 #import "IntroLayer.h"
 #import "GCTurnBasedMatchHelper.h"
 #import "UserPreferences.h"
+#import "InAppPurchaseManager.h"
 
 @implementation AppController
 
@@ -25,6 +26,7 @@
 	[[GCTurnBasedMatchHelper sharedInstance] authenticateLocalUser];
     [GKTurnBasedEventHandler sharedTurnBasedEventHandler].delegate = [GCTurnBasedMatchHelper sharedInstance];
     [UserPreferences sharedInstance];
+    [[InAppPurchaseManager sharedInstance] loadStore];
     
 
 

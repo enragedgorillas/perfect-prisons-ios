@@ -9,11 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
 #import "GCTurnBasedMatchHelper.h"
+#import <iAd/iAd.h>
 
 
-@interface MainMenu : CCLayer {
-    
+@interface MainMenu : CCLayer<UIAlertViewDelegate> {
+    ADBannerView * adView;
+    BOOL isBannerVisible;
 }
+
 +(CCScene *) scene;
 -(void)newGame;
 

@@ -13,6 +13,7 @@
     
     NSString *currentMap;
     CCLabelTTF *current;
+    CCMenuItem *upgrade;
 }
 
 +(CCScene *) scene;
